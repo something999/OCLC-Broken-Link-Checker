@@ -55,6 +55,9 @@ class LinkCheckerAppWindow:
             _output (ScrolledText | None): A text area for displaying program
                 outputs. This is initialized in `_setup_home`.
 
+            _output_count (int): The total number of lines printed to the
+                output text area.
+
             _fields (dict[str, ttk.Widget] | dict[str, None]): A series of
                 input field widgets used to change and display the values of
                 a config file. These fields are initialized in `_setup_settings`.
@@ -70,6 +73,7 @@ class LinkCheckerAppWindow:
 
         self._scans = dict()
         self._output = None
+        self._output_count = 0
         self._fields = dict()
 
         self._setup_home()
@@ -342,7 +346,10 @@ class LinkCheckerAppWindow:
     def log_message(self, message: str) -> None:
         """Display backend outputs to the display box under the Home tab."""
         self._output.configure(state = 'normal')
+        if self._output_count > 1000:
+            self._output.delete('1.0', '2.0')
         self._output.insert(tkinter.END, message + '\n')
+        self._output_count += 1
         self._output.configure(state = 'disabled')
         self._output.yview(tkinter.END)
 

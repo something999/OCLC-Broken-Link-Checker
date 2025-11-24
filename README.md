@@ -28,6 +28,8 @@ There are two ways to install this application:
 
 **These files are located under the Releases tab on GitHub.**
 
+Note that if you choose to download the executable file and run it, Windows may display a warning about running files from unknown publishers. This is expected behavior. If you trust the source, click **More info -> Run anyway** to continue (if not, use the source code package).
+
 Currently, **official support is only provided for Windows 64-bit operating systems**.<br>
 Windows 32-bit, Mac and Linux users may attempt to run the program using emulators (e.g, [Wine](https://www.winehq.org/)) or virtual machines (e.g, [Virtual Box](https://www.virtualbox.org)), but full functionality is not guaranteed.
 
@@ -38,10 +40,11 @@ Windows 32-bit, Mac and Linux users may attempt to run the program using emulato
     * If you are not sure whether you are running a 64-bit version of Windows:
         1. Open the search box.
         2. Locate **System** or **System Information**.
-        3. Look for the phrase **64-bit operating system, x64 based processor** or **x64-based PC** under System Type. If you see either of these phrases, your computer is running a 64-bit version of Windows (if not, use the source code package option).
+        3. Look for the phrase **64-bit operating system, x64 based processor** or **x64-based PC** under System Type. If you see either of these phrases, your computer is running a 64-bit version of Windows (if not, you must use the source code package).
 
 **Source package installation** is recommended if:
 * You want to run the program directly in a Python IDE.
+* You want to be assured of the executable contents.
 * You plan to modify the code (e.g, change the behavior of `APIClient` or `HTTPClient`, create your own Mac distribution, etc.).
 * You feel comfortable installing Python on your system.
 * You feel comfortable installing external Python libraries in your global Python installation or within a virtual environment.
