@@ -346,7 +346,7 @@ class LinkCheckerAppWindow:
     def log_message(self, message: str) -> None:
         """Display backend outputs to the display box under the Home tab."""
         self._output.configure(state = 'normal')
-        if self._output_count > 1000:
+        if self._output_count > 2000:
             self._output.delete('1.0', '2.0')
         self._output.insert(tkinter.END, message + '\n')
         self._output_count += 1
