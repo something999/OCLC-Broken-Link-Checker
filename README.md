@@ -26,7 +26,7 @@ There are two ways to install this application:
 1. **Download the executable file** (`oclc-broken-link-checker.exe`).
 2. **Download the source package** (`.zip` or `tar.gz`).
 
-**These files are located under the Releases tab on GitHub.**
+**These files are located under the Releases tab on GitHub. Always choose the most recent build (currently v0.1.0-alpha.2).**
 
 Note that if you choose to download the executable file and run it, Windows may display a warning about running files from unknown publishers. This is expected behavior. If you trust the source, click **More info -> Run anyway** to continue (if not, use the source code package).
 
@@ -35,19 +35,19 @@ Windows 32-bit, Mac and Linux users may attempt to run the program using emulato
 
 ### Choosing an Installation Approach
 **Executable installation** is recommended if:
-* You want to run the program from your file explorer.
-* You are running a 64-bit version of Windows.
+* You want to **run the program from your file explorer**.
+* You are running a **64-bit version of Windows**.
     * If you are not sure whether you are running a 64-bit version of Windows:
         1. Open the search box.
         2. Locate **System** or **System Information**.
         3. Look for the phrase **64-bit operating system, x64 based processor** or **x64-based PC** under System Type. If you see either of these phrases, your computer is running a 64-bit version of Windows (if not, you must use the source code package).
 
 **Source package installation** is recommended if:
-* You want to run the program directly in a Python IDE.
+* You want to **run the program directly in an IDE**.
 * You want to be assured of the executable contents.
 * You plan to modify the code (e.g, change the behavior of `APIClient` or `HTTPClient`, create your own Mac distribution, etc.).
-* You feel comfortable installing Python on your system.
-* You feel comfortable installing external Python libraries in your global Python installation or within a virtual environment.
+* You feel **comfortable installing Python on your system**.
+* You feel **comfortable installing external Python libraries** in your global Python installation or within a virtual environment.
 
 If you choose to download the source package, you will need to install Python3.11+ and the libraries listed under `requirements.txt`.
 
@@ -66,39 +66,64 @@ You may also want to look into the other application settings, such as:
     allowable percentage of broken links within a collection.<br>
     A value of 0.0 corresponds to 0%; a value of 1.0 corresponds to 100%.
     If at least this percentage of links are non-accessible, the entire collection is flagged as broken.<br>
-    By default, this value is 0.0.
-* **User-Agent**: A [string that provides technical information to web servers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/User-Agent). This can technically be any value.<br> By default, this value is empty.
+    *By default, this value is 0.0.*
+* **User-Agent**: A [string that provides technical information to web servers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/User-Agent). This can technically be any value.<br>*By default, this value is empty.*
     * Some websites may block your request if you fail to provide a User-Agent string.
 * **Ignored Domains**: A list of domains that the application should skip during the link‑checking process.<br>
-If a resource link belongs to one of these domains, the link will automatically be flagged as inaccessible (with a placeholder status code of `-1`).<br>By default, this list is empty.
+If a resource link belongs to one of these domains, the link will automatically be flagged as inaccessible (with a placeholder status code of `-1`).<br>*By default, this list is empty.*
     * You may want to use this list to exclude links from domains that explicitly forbid or actively block web scraping attempts or interpret frequent HTTP HEAD requests as web scraping-like behavior (e.g., [HathiTrust](https://www.hathitrust.org/the-collection/terms-conditions/acceptable-use-policy/)).
+
+### Reseting the Config File
+If you find yourself needing to reset the application settings, you will need to modify or delete the existing `config.json` file.<br>
+This file should be located in the same location as the .exe file (for an executable installation) or at the root of the project folder (for a source code installation, assuming the program has been run once).
+
+It is recommended to **save your existing config.json file** before modifying or deleting it, especially if you plan on copying and pasting values from one `config.json` file to another `config.json` file.<br>
+
+The following template can be used as a starting point. Copying and pasting these lines into `config.json` will reset all application settings to their default values.
+```
+{
+    "wskey": "",
+    "user_agent": "",
+    "ignorelist": [
+        ""
+    ],
+    "failure_threshold": 0.0
+}
+```
 
 # Usage
 ## Basic Usage
 The application runs in two modes:
 * The **Quick Scan** mode, which uses the parent domain of each resource link to determine if a link is inaccessible.<br>
-This mode assumes that if a domain is inaccessible, all of the links under that domain are also inaccessible.
+This mode assumes that **if a domain is inaccessible, all of the links under that domain are also inaccessible.**
     * **Example**: When checking Resource A (`https://example.com/A`) and Resource B (`https://example.com/B`), the application will test whether the parent domain `example.com` is accessible. The result of that check will then be applied to both Resource A and Resource B.
     * **Limitation**: A single failed domain test may cause all links under the domain to be flagged as inaccessible, leading to false positives.
 * The **Full Scan** mode, which checks each resource link to determine if a link is inaccessible.<br>
-This mode assumes that every link should be checked individually.
+This mode assumes that **every link should be checked individually.**
     * **Example**: When checking Resource A (`https://example.com`) and Resource B (`https://example.com/B`), the application will test both links. The results of these checks will be separately applied to Resource A and Resource B.
     * **Limitation**: Sending multiple HTTP requests to the same domain in rapid succession may trigger throttling or blocking attempts from the web server, leading to false positives.
 
-**To start a scan, click on the corresponding button in the Home tab.**
+**To start a scan, click on the corresponding button in the Home tab, then wait for the application to finish.**
 
 ### Choosing a Scan Mode
 **Quick Scan** mode is recommended if:
-- You have a large number of online resources to check.  
+- You have a **large number of online resources** to check.  
 - The resources belong to repositories with a reputation for stability. 
-- You favor speed over accuracy.
+- You favor **speed over accuracy**.
 
 **Full Scan** mode is recommended if:
-- You have a smaller number of online resources to check.  
+- You have a **small number of online resources** to check.  
 - The resources belong to repositories with less predictable availability.
-- You prefer accuracy over speed.
+- You favor **accuracy over speed**.
 
-**No further action is needed. Results will be generated and appear within the text box in the Home Tab.**
+### Notes
+* The accuracy and speed of the results are primarily determined by the quality of your network connection and the policies of each repository's web server.
+    * If your network connection is slow or unreliable, the application may take a long time to run and may fail to retrieve results. <br>
+    Since the application needs to send HTTP requests to check the availability of resources, the only way to improve performance is to switch to a faster or more reliable network.
+    * Some websites may temporarily block requests if a large number of requests are sent in a short time (see throttling or rate-limiting).<br>In some cases, the site may try to block your IP address. If the site blocks your IP address, you may need to use a VPN service or switch to another network to regain access (but this does not mean that the application will suddenly run faster).
+        * If you are concerned about IP blocking, you may want to consider launching the VPN before running the application.
+* The application assumes that your repositories can be accessed without authentication. If a repository requires a login to access, you may want to consider adding the repository's domain to the ignored domains list and check the contents of that repository manually.
+* The application cannot pause or resume progress. If the program is interrupted, you will need to restart the program and redo the check.
 
 ## Advanced Usage
 If you want a more detailed report explaining which links the application found or which links were flagged as broken, you can attempt the following:
@@ -110,7 +135,7 @@ Each row should contain the following information:
 * The resource's OCLC identifier.
 * The resource's title.
 * The resource's URL.
-* The status code recorded for that URL.
+* The status code recorded for that URL. <br>A -1 indicates an error (e.g., the scrapper could not access the URL or received no valid response).
 
 **Note that this file is temporary. Cache files are automatically cleared each time the application restarts.**
 

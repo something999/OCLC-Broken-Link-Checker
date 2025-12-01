@@ -179,6 +179,9 @@ class LinkCheckerCore:
         on_check_start_event(f'Identified {link_total} links.')
         on_check_event(f'Checking links. Please do not exit...')
 
+        # The links are processed sequentially, rather than concurrently.
+        # This is less efficient but ensures that the results of a HTTP check
+        # are immediately cached as soon as the check finishes.
         async with self._http_client as client:
             # Randomization is used to decrease the chance of hitting multiple
             # URLs from the same domain in consecutive order (which might

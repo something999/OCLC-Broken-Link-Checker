@@ -25,6 +25,9 @@ _logger = logging.getLogger(__name__)
 # HTTPClient Structs
 #########################
 
+# A custom structure was introduced to make the code appear more organized.
+# If efficiency is a priority, the attributes of this structure could be
+# replaced with the equivalent aiohttp built-in attributes (url, status, content).
 @dataclass
 class HTTPResponse:
     """Structure to store information returned by an HTTP request.
@@ -233,7 +236,7 @@ class HTTPClient:
         if self.check_domains_only == check_domains_only:
             return
         self.check_domains_only = check_domains_only
-        _logger.debug('HTTPClient: Value of CHECK_DOMAINS_ONLY changed to "\%s".',
+        _logger.debug('HTTPClient: Value of CHECK_DOMAINS_ONLY changed to "%s".',
                       self.check_domains_only)
 
     async def _send(self,
@@ -386,7 +389,7 @@ class HTTPClient:
 
         except aiohttp.InvalidURL:
             _logger.warning('Failed to send HTTP %s request to URL "%s" - '
-                            'URL is not a link.', method, url, url)
+                            'URL is not a link.', method, url)
         except (aiohttp.ConnectionTimeoutError, TimeoutError):
             _logger.warning('Failed to send HTTP %s request to URL "%s" - '
                             'Request timed out.', method, url)
